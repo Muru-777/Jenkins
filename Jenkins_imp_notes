@@ -1,0 +1,55 @@
+Jenkins:
+
+Jenkins shared library.
+
+Mainly used for code reusability in pipeline jobs. For eg : logic to delay war file to tomcat. Reuse this logic in multiple pipeline jobs.so we can use this.
+Project:
+ Var, src and resources.
+
+Var - groovy script, src - java utility will be available(can be used for reuse), resources - static configuration files.
+
+New repository ( called shared libs).
+Create dir.( var and src)- all are not mandatory.
+Groovy file.
+
+  def  call(name){
+     Echo “ Hey ${name}”
+}
+Create global pipeline libraries in Jenkins and use that name in pipeline jobs
+
+Environment{
+   credintials=…
+}
+Options{
+    buildDiscarder(logRotator(numToKeepStr: '1')) }
+}
+Disable concurrent build
+skipstageafterunstable()
+timeout(time: 3, unit: ‘HOURS’)
+retry(3)
+
+Parameters { string(name: 'DEPLOY_ENV', defaultValue: 'staging', description: '') }
+
+Triggers{
+Pollscm { pollSCM('H */4 * * 1-5') }
+{ cron('H */4 * * 1-5') }
+
+Tools{
+ maven 'apache-maven-3.0.1' 
+    }
+A section defining tools to auto-install and put on the PATH.
+
+The input directive on a stage allows you to prompt for input, using the input step. 
+
+When condition:
+
+stage('Example Deploy') {
+            when {
+                branch 'production'
+Multiple condition:
+
+when {
+                branch 'production'
+                environment name: 'DEPLOY_TO', value: 'production'
+            }
+allOf and anyOf can used along with this
